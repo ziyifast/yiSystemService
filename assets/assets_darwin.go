@@ -10,6 +10,4 @@ var (
 	ShutdownBatTmpl []byte
 	//go:embed startup.sh.tmpl
 	StartupBatTmpl []byte
-	//go:embed SourceHanSansCN-Normal.ttf
-	FontBytes []byte
 )

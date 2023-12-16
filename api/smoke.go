@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -9,7 +9,7 @@ import (
 func smoke(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Errorf("%v\n", err)
+			log.Errorf("%v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -17,9 +17,10 @@ func smoke(w http.ResponseWriter, r *http.Request) {
 	s := time.Now().String()
 	_, err := w.Write([]byte(s))
 	if err != nil {
-		fmt.Errorf("%v\n", err)
+		log.Errorf("%v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	log.Infof("handle msg success...")
 	return
 }

@@ -1,7 +1,9 @@
 package api
 
 import (
+	"awesomeProject1/consts"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -22,7 +24,11 @@ func ServiceHandler() error {
 		}
 	}()
 	mux := http.NewServeMux()
-	mux.Handle("/yi-service/version", interceptor(http.HandlerFunc(smoke)))
+	mux.Handle("/yi-service/smoke", interceptor(http.HandlerFunc(smoke)))
 	mux.Handle("/yi-service/conf", interceptor(http.HandlerFunc(getConf)))
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", consts.ServicePort), mux); err != nil {
+		log.Errorf("err=%v", err)
+		return err
+	}
 	return nil
 }

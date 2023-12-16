@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/kardianos/service"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
 	"runtime"
@@ -39,14 +40,14 @@ func (p *Program) Start(s service.Service) error {
 }
 
 func (p *Program) run() error {
-	fmt.Sprintf("%s service running %s arguments %v\n", runtime.GOOS, service.Platform(), os.Args)
+	log.Infof("%s service running %s arguments %v\n", runtime.GOOS, service.Platform(), os.Args)
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Errorf("%v\n", r)
 		}
 	}()
 	if err := api.ServiceHandler(); err != nil {
-		fmt.Errorf("%v\n", err)
+		log.Errorf("%v\n", err)
 		return err
 	}
 	return nil
@@ -55,16 +56,16 @@ func (p *Program) run() error {
 func (p *Program) Stop(s service.Service) error {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Errorf("%v", err)
+			log.Errorf("%v", err)
 		}
 	}()
-	fmt.Sprintf("program stop service %s", consts.ServiceName)
+	log.Infof("program stop service %s", consts.ServiceName)
 	if p.exit != nil {
 		close(p.exit)
 	}
 	if p != nil && p.cmd != nil && p.cmd.Process != nil {
 		if err := p.cmd.Process.Kill(); err != nil {
-			fmt.Printf("%v\n", err)
+			log.Errorf("%v\n", err)
 		}
 	}
 	commandStop := exec.Command(stopCmd)
@@ -73,12 +74,12 @@ func (p *Program) Stop(s service.Service) error {
 	commandStop.Stdout = &out
 	commandStop.Stderr = &stderr
 	if err := commandStop.Run(); err != nil {
-		fmt.Printf("%v\n", err)
+		log.Errorf("%v\n", err)
 	}
 	if commandStop.Process != nil {
 		commandStop.Process.Kill()
 	}
-	fmt.Printf("PROGRAM STOPPED: %s\n", out.String())
+	log.Infof("PROGRAM STOPPED: %s\n", out.String())
 	if service.Interactive() {
 		os.Exit(0)
 	}

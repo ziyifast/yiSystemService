@@ -1,12 +1,12 @@
 @echo off
-@REM This command bash will stop the downloader windows service
+@REM This command bash will stop the yiService windows service
 @REM And then uninstall this service from operation system
-@REM Configurations will be remained in directory c:/datahub/downloader on the disk.
+@REM Configurations will be remained in directory c:/yiService/yiService on the disk.
 @REM You can restart from those configurations in the near future.
 @REM
-c:/xdown/downloader.exe service stop
-set "$process=downloader.exe"
+c:/yiService/yiService.exe service stop
+set "$process=yiService.exe"
 for %%a in (%$process%) do tasklist /fi "imagename eq %%a"  | find "%%a" && taskkill /f /im %%a
 
-echo shutdown xdown successfully!
+echo shutdown yiService successfully!
 pause
