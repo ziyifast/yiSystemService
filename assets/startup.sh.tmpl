@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# It is recommended to start here.
+# Modify bash args below.
+# "name" and "tags" must be alphanumeric sequence: [a-zA-Z-_.]
+# Chinese chars are not supported here in bash file.
+#
+# Example:
+#
+# downloader.exe service start \
+#
+# Startup from here
+#
+# launchctl start com.xsky.downloader
+./downloader service start
+
+
+echo xdown started!
+ps aux |grep xdown
+echo ""
